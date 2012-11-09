@@ -80,7 +80,7 @@ grails.project.dependency.resolution = {
 
         compile(
                 // Amazon Web Services programmatic interface
-                'com.amazonaws:aws-java-sdk:1.3.21',
+                'com.amazonaws:aws-java-sdk:1.3.23',
         ) {
             // AWS defines their dependencies as open-ended, which causes problems when resolving.
             // See http://stackoverflow.com/a/7990573/869
@@ -125,6 +125,9 @@ grails.project.dependency.resolution = {
 
                 // Call Perforce in process. Delete when user data no longer come from Perforce at deployment time.
                 'com.perforce:p4java:2010.1.269249',
+
+                // Rules for AWS named objects.
+                'com.netflix.frigga:frigga:0.3'
         ) { // Exclude superfluous and dangerous transitive dependencies
             excludes(
                     // Some libraries bring older versions of JUnit as a transitive dependency and that can interfere

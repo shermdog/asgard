@@ -155,7 +155,7 @@ class PushService {
                 appName: appName,
                 name: name,
                 cluster: Relationships.clusterFromGroupName(name),
-                variables: Relationships.dissectCompoundName(name),
+                variables: Relationships.parts(name),
                 actionName: actionName,
                 allTerminationPolicies: awsAutoScalingService.terminationPolicyTypes,
                 terminationPolicy: group.terminationPolicies[0],
@@ -173,7 +173,7 @@ class PushService {
                 selectedSecurityGroups: selectedSecurityGroups ?: lc.securityGroups,
                 defKey: lc.keyName,
                 keys: awsEc2Service.getKeys(userContext).sort { it.keyName.toLowerCase() },
-                iamInstanceProfile: lc.iamInstanceProfile,
+                iamInstanceProfile: lc.iamInstanceProfile ?: configService.defaultIamRole,
                 // Rolling push process options
                 relaunchCount: relaunchCount,
                 concurrentRelaunches: 1,
