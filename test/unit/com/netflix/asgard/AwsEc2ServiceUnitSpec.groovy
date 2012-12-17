@@ -322,10 +322,10 @@ class AwsEc2ServiceUnitSpec extends Specification {
 
     private Collection<SecurityGroup> simulateWarGames() {
         SecurityGroupDsl.config {
-            wopr(7101, 7102) addAsIngress(norad)
-            joshua(7101, 7102) addAsIngress([wopr, globalthermonuclearwar, tictactoe])
-            modem(8080, 8080) addAsIngress(joshua)
-            falken(7101, 7102) addAsIngress(joshua)
+            wopr(7101, 7102) withIngress norad
+            joshua(7101, 7102) withIngress([wopr, globalthermonuclearwar, tictactoe])
+            modem(8080, 8080) withIngress joshua
+            falken(7101, 7102) withIngress joshua
         }
     }
 

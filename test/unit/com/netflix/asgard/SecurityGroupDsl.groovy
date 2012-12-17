@@ -67,16 +67,18 @@ class SecurityGroupDsl {
         SecurityGroup securityGroup
         IpPermission ipPermission
 
-        def addAsIngress(ingress) {
+        SecurityGroupWithPermission withIngress(ingress) {
             ingress.each {
                 it.withIpPermissions(ipPermission)
             }
+            this
         }
 
-        def addAsEgress(egress) {
+        SecurityGroupWithPermission withEgress(egress) {
             egress.each {
                 it.withIpPermissionsEgress(ipPermission)
             }
+            this
         }
     }
 }
