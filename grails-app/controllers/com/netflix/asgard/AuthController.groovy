@@ -42,7 +42,12 @@ class AuthController {
         def principal = SecurityUtils.subject?.principal
         SecurityUtils.subject?.logout()
         ConfigUtils.removePrincipal(principal)
-        String redirectUri = params.targetUri ?: '/'
+        String logoutUrl = pluginService.authenticationProvider.logoutUrl(request) ?: params.targetUri
+        String redirectUri = logoutUrl ?: '/'
         redirect(uri: redirectUri)
+    }
+
+    def unauthorized = {
+        forward action: 'login'
     }
 }

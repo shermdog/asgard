@@ -131,6 +131,12 @@
           <td class="name">Adding to Load Balancer:</td>
           <td class="value'}">${addToLoadBalancerStatus}</td>
         </tr>
+        <g:if test="${isChaosMonkeyActive}">
+          <tr class="prop">
+            <td class="name">Chaos Monkey:</td>
+            <td class="value"><a class="cloudready" href="${chaosMonkeyEditLink}">Edit in Cloudready</a></td>
+          </tr>
+        </g:if>
         <tr class="prop">
           <td class="name">Created Time:</td>
           <td class="value"><g:formatDate date="${group.createdTime}"/></td>
@@ -273,7 +279,7 @@ ${a.cause} : ${a.description} (${a.progress}% done) (Status: ${a.statusCode})
                 <g:render template="/group/instanceControls"/>
                 <table id="instanceTable" class="sortable list">
                   <tr class="prop">
-                    <th class="sorttable_nosort"><input type="checkbox" id="allInstances"/></th>
+                    <th class="sorttable_nosort"><input class="requireLogin" type="checkbox" id="allInstances"/></th>
                     <th>Instance</th>
                     <th>Zone</th>
                     <th>State</th>
@@ -281,7 +287,7 @@ ${a.cause} : ${a.description} (${a.progress}% done) (Status: ${a.statusCode})
                     <g:if test="${group.mostCommonAppVersion}">
                       <th>Package</th>
                       <th>Ver</th>
-                      <th>CL</th>
+                      <th>Commit</th>
                       <th>Build</th>
                     </g:if>
                     <th>ELBs</th>
@@ -292,7 +298,7 @@ ${a.cause} : ${a.description} (${a.progress}% done) (Status: ${a.statusCode})
                   </tr>
                   <g:each var="ins" in="${group.instances}" status="i">
                     <tr class="${(i % 2) == 0 ? 'odd' : 'even'} ${ins.appVersion == group.mostCommonAppVersion ? '' : 'inconsistent'}" data-instanceid="${ins.instanceId}">
-                      <td><g:checkBox name="instanceId" value="${ins.instanceId}" checked="0"/></td>
+                      <td><g:checkBox class="requireLogin" name="instanceId" value="${ins.instanceId}" checked="0"/></td>
                       <td class="tiny"><g:linkObject type="instance" name="${ins.instanceId}" /></td>
                       <td><g:availabilityZone value="${ins.availabilityZone}" /></td>
                       <td class="${ins.lifecycleState == 'InService' ? '' : 'emphasized'}">
@@ -302,7 +308,7 @@ ${a.cause} : ${a.description} (${a.progress}% done) (Status: ${a.statusCode})
                       <g:if test="${group.mostCommonAppVersion}">
                         <td class="appVersion">${ins.appVersion?.packageName}</td>
                         <td class="appVersion">${ins.appVersion?.version}</td>
-                        <td class="appVersion">${ins.appVersion?.changelist}</td>
+                        <td class="appVersion">${ins.appVersion?.commit}</td>
                         <td class="appVersion">
                         <g:if test="${ins.appVersion?.buildJobName && buildServer}">
                           <a href="${buildServer}/job/${ins.appVersion.buildJobName}/${ins.appVersion.buildNumber}/"
