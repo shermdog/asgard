@@ -78,7 +78,7 @@
         </shiro:isNotLoggedIn>
       </g:if>
       <div class="search" title="Find entities by name">
-        <form action="/search" method="GET">
+        <form action="/search" method="GET" class="allowEnterKeySubmit">
           %{--<input type="search" results="10" autosave="asgard${env}globalsearch" name="q" placeholder="Global search by names" value="${params.q}">--}%
         </form>
       </div>
@@ -91,10 +91,11 @@
        <g:link class="applications" controller="application" action="list">App</g:link>
        <ul>
          <li class="menuButton"><g:link class="applications" controller="application" action="list">Applications</g:link></li>
+         <li class="menuButton"><g:link class="stacks" controller="stack" action="list">Stacks</g:link></li>
          <li class="menuButton"><g:link class="users" controller="application" action="owner">Owners</g:link></li>
          <li class="menuButton"><g:link class="securityGroups" controller="security" action="list">Security Groups</g:link></li>
          <g:if test="${platformserviceExists}">
-           <li class="menuButton"><g:link class="fastProperties" controller="fastProperty" action="list">Fast Properties</g:link></li>
+           <li class="menuButton"><g:link class="fastProperties" controller="fastProperty" action="apps">Fast Properties</g:link></li>
          </g:if>
        </ul>
      </li>

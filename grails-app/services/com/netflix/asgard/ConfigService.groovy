@@ -524,10 +524,17 @@ class ConfigService {
     }
 
     /**
-     * @return url with content that people should grok in order to make educated decisions about using Spot Instances
+     * @return URL with content that people should grok in order to make educated decisions about using Spot Instances
      */
     String getSpotUrl() {
         grailsApplication.config.cloud?.spot?.infoUrl ?: ''
+    }
+
+    /**
+     * @return URL with info about configuring Fast Properties
+     */
+    String getFastPropertyInfoUrl() {
+        grailsApplication.config.platform?.fastPropertyInfoUrl ?: ''
     }
 
     /**
@@ -542,5 +549,56 @@ class ConfigService {
      */
     Collection<Region> getChaosMonkeyRegions() {
         grailsApplication.config.cloud?.cloudReady?.chaosMonkey?.regions ?: []
+    }
+
+    /**
+     * @return Base URL of the build server (Jenkins) for your Applications.
+     */
+    String getBuildServerUrl() {
+        grailsApplication.config.cloud?.buildServer ?: ''
+    }
+
+    /**
+     * @return For stack names that are revered, we check the health of all the ASG instances.
+     */
+    Collection<String> getSignificantStacks() {
+        grailsApplication.config.cloud?.significantStacks ?: []
+    }
+
+    /**
+     * @return Regions other than the standard AWS ones (a cloud-like data center for example).
+     */
+    Map<String, String> getSpecialCaseRegions() {
+        grailsApplication.config.cloud?.specialCaseRegions ?: [:]
+    }
+
+    /**
+     * @return A Closure that determines if EBS volumes are needed for launch configurations based on instance type.
+     */
+    Closure<Boolean> getInstanceTypeNeedsEbsVolumes() {
+        grailsApplication.config.cloud?.launchConfig?.ebsVolumes?.instanceTypeNeeds ?: { String instanceType ->
+            instanceType.startsWith('m3.')
+        }
+    }
+
+    /**
+     * @return The number of EBS volumes added to launch configurations for specific instance types.
+     */
+    int getCountOfEbsVolumesAddedToLaunchConfigs() {
+        grailsApplication.config.cloud?.launchConfig?.ebsVolumes?.count ?: 4
+    }
+
+    /**
+     * @return The size of EBS volumes added to launch configurations for specific instance types.
+     */
+    int getSizeOfEbsVolumesAddedToLaunchConfigs() {
+        grailsApplication.config.cloud?.launchConfig?.ebsVolumes?.size ?: 125
+    }
+
+    /**
+     * @return The prefix of the device name for EBS volumes added to launch configurations for specific instance types.
+     */
+    String getPrefixOfEbsVolumesAddedToLaunchConfigs() {
+        grailsApplication.config.cloud?.launchConfig?.ebsVolumes?.prefix ?: 'sdb'
     }
 }
