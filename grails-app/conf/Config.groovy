@@ -29,6 +29,9 @@ log4j = {
                 file: "${logDirectory}/asgard.log",
                 layout: pattern(conversionPattern: '[%d{ISO8601}] [%t] %c{4}    %m%n'),
                 datePattern: "'.'yyyy-MM-dd")
+
+        rollingFile name: "stacktrace", maxFileSize: 1024,
+                file: "${logDirectory}/stacktrace.log"
     }
 
     root {
@@ -155,6 +158,8 @@ cloud {
     ]
     spot.infoUrl = 'http://aws.amazon.com/ec2/spot-instances/'
 }
+
+cors.allow.origin.regex = '$.^' // Disable CORS support by default
 
 healthCheck {
     minimumCounts {

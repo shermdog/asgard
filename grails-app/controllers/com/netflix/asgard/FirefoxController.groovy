@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Netflix, Inc.
+ * Copyright 2013 Netflix, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.netflix.asgard.cache
+package com.netflix.asgard
 
 /**
- * Characteristic of Spring-managed beans (usually Grails services) that are responsible for initializing one or more
- * in-memory caches.
- *
- * @see com.netflix.asgard.InitService for implications
+ * Controller for redirect destination page to explain why Firefox is not currently safe to use with Asgard.
  */
-interface CacheInitializer {
+class FirefoxController {
 
-    void initializeCaches()
-
+    def warning() {
+        render '''Please switch to Google Chrome or Safari. You appear to be using Firefox. A critical bug in Firefox
+currently makes it unsafe to use with Asgard. The Firefox bug is sporadic but reproducible. It will take time for the
+Asgard developers to provide a robust solution. In the meantime, please use Google Chrome or Safari for Asgard usage.'''
+    }
 }

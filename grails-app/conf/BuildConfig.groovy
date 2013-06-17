@@ -88,7 +88,9 @@ grails.project.dependency.resolution = {
         }
 
         compile(
-                // Transitive dependencies of aws-java-sdk, but also used directly
+                // Transitive dependencies of aws-java-sdk, but also used directly.
+                // It would be great if we could upgrade httpcore and httpclient, but we can't until the AWS Java SDK
+                // upgrades its dependencies. If we simply upgrade these, then some Amazon calls fail.
                 'org.apache.httpcomponents:httpcore:4.1',
                 'org.apache.httpcomponents:httpclient:4.1.1',
 
@@ -118,7 +120,7 @@ grails.project.dependency.resolution = {
                 'org.jsoup:jsoup:1.6.1',
 
                 // Static analysis for Groovy code.
-                'org.codenarc:CodeNarc:0.18',
+                'org.codenarc:CodeNarc:0.18.1',
 
                 // This fixes ivy resolution issues we had with our transitive dependency on 1.4.
                 'commons-codec:commons-codec:1.5',
@@ -127,7 +129,7 @@ grails.project.dependency.resolution = {
                 'com.perforce:p4java:2010.1.269249',
 
                 // Rules for AWS named objects.
-                'com.netflix.frigga:frigga:0.4',
+                'com.netflix.frigga:frigga:0.6',
 
                 // Groovy concurrency framework.
                 'org.codehaus.gpars:gpars:1.0.0'
@@ -157,6 +159,7 @@ grails.project.dependency.resolution = {
         test(":spock:0.7") {
           exclude "spock-grails-support"
         }
+        runtime ":cors:1.0.4"
 
         test ':code-coverage:1.2.5'
 
