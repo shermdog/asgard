@@ -102,12 +102,19 @@
           	<tr>
           		<th>Key</th>
           		<th>Value</th>
+          		<th>Propagate</th>
           	</tr>
           	</thead>
 		      <g:each var="tag" in="${tags}" status="i">
 		        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 		          <td>${tag.key }</td>
 		          <td><input type="text" id="tags.value.${tag.key}" name="tags.value.${tag.key}" value="${tag.value}"/></td>
+		          <g:if test="${tag.propagateAtLaunch }">
+		          	<td><input type="checkbox" id="tags.props.${tag.key}" name="tags.props.${tag.key}" checked="yes" /></td>
+		          </g:if>
+		          <g:else>
+		          	<td><input type="checkbox" id="tags.props.${tag.key}" name="tags.props.${tag.key}" /></td>
+		          </g:else>
 		        </tr>
 		      	</g:each>
 		      	</table>
