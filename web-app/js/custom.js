@@ -642,8 +642,40 @@ jQuery(document).ready(function() {
 
         // If there's a textarea that should be resizable, make it so.
         jQuery('textarea.resizable').TextAreaResizer();
+
+        Opentip.styles.interactive = {
+            hideTriggers: ['closeButton'] // Keeps the tip visible until the user clicks the close button
+        };
+        Opentip.styles.standard.target = true; // Take the chosen element as a target of the stem
+        Opentip.styles.standard.background = '#fffbc5'; // Pale yellow
     };
     setUpCommonUserInterfaceEnhancements();
+
+    var hideAllOpentips = function() {
+        var i;
+        for(i = 0; i < Opentip.tips.length; i++) {
+            Opentip.tips[i].hide();
+        }
+    };
+
+    var activateTooltips = function() {
+        var i, jTipContainers, activateTooltip;
+
+        activateTooltip = function(tipContainer) {
+            var tipStyle, jImage, jTemplate, jTipContainer;
+            jTipContainer = jQuery(tipContainer);
+            tipStyle = jTipContainer.data('tip-style');
+            jImage = jTipContainer.find('img');
+            jTemplate = jTipContainer.find('.template');
+            jImage.opentip(jTemplate.html(), { style: tipStyle || 'standard' });
+        };
+
+        jTipContainers = jQuery('.tip');
+        for (i = 0; i < jTipContainers.length; i++) {
+            activateTooltip(jTipContainers[i]);
+        }
+    };
+    activateTooltips();
 
     // Push prepare page
     var setUpPushPreparePage = function() {
@@ -787,6 +819,20 @@ jQuery(document).ready(function() {
     };
     setUpClusterChaosMonkeyOptions();
 
+    var setUpDeploymentWorkflowOptions = function() {
+        jQuery("input[name='doCanary']").click(function() {
+            var doCanary;
+            doCanary = this.id === "doCanaryTrue";
+            jQuery("tbody.canaryOptions").toggleClass("concealed", !doCanary);
+        });
+        jQuery("input[name='disablePreviousAsg']").click(function() {
+            var disablePreviousAsg;
+            disablePreviousAsg = this.id === "disablePreviousAsgNo";
+            jQuery("tbody.fullTrafficOptions").toggleClass("concealed", disablePreviousAsg);
+        });
+    };
+    setUpDeploymentWorkflowOptions();
+
     // Cluster page
     var setUpClusterPage = function() {
         var config, jCreateContainer, jCreateAdvancedTrs;
@@ -907,9 +953,9 @@ jQuery(document).ready(function() {
             var scroller = autoScroller(logElem[0]);
             var poller;
             var ajaxOptions = {
-                url: document.location.href + '.json',
+                url: window.location.origin + window.location.pathname + '.json' + window.location.search,
                 dataType: 'json',
-                error: function() {
+                error: function(e) {
                     if (poller) { poller.stop = true; }
                     logElem.before('<div class="error">Error polling for log. Please reload page.</div>');
                 },
@@ -1009,6 +1055,47 @@ jQuery(document).ready(function() {
         updatePreview(); // If the page has a validation error then fields are pre-populated on page load.
     };
     setUpAutoScalingGroupCreatePage();
+
+    // Auto Scaling Group edit page
+    var setUpGroupEditScreen = function() {
+        var showAndEnableDesiredSize, jDesiredCapacityContainer = jQuery('.desiredCapacityContainer');;
+        if (jDesiredCapacityContainer.exists()) {
+            showAndEnableDesiredSize = function() {
+                jDesiredCapacityContainer.addClass('showManual').yellowFade();
+                hideAllOpentips();
+            };
+            jQuery(document).on('click', '.enableManualDesiredCapacityOverride', showAndEnableDesiredSize);
+        }
+        
+        addRow = function(){        	 
+            counter = jQuery('#tags tr').length - 1;
+
+            var newRow = jQuery("<tr>");
+            var cols = "";
+
+            // Need to figure out the proper field names here still...
+            cols += '<td><input type="text" name="tags.key' + counter + '" maxlength="128"/></td>';
+            cols += '<td><input type="text" name="tags.value' + counter + '" maxlength="256"/></td>';
+            cols += '<td><input type="checkbox" name="tags.props' + counter + '"/></td>';
+
+            cols += '<td><input type="button" class="ibtnDel"  value="Delete"></td>';
+            jQuery(newRow).append(cols);
+            if (counter == 9) jQuery('#addrow').attr('disabled', true).prop('value', "You've reached the limit");
+            jQuery("table.sortable").append(newRow);
+            counter++;
+        };
+        
+        delRow = function(){
+        	jQuery(this).closest("tr").remove();
+        	
+        	counter -= 1
+            jQuery('#addrow').attr('disabled', false).prop('value', "Add Tag");
+        }
+        
+        jQuery(document).on('click', '#addrow', addRow);
+        jQuery(document).on('click', '.ibtnDel', delRow);
+    };
+    setUpGroupEditScreen();
 
     // Auto Scaling Group detail page
     var setUpGroupDetailScreen = function() {

@@ -109,7 +109,7 @@
           	<td>
           	<g:if test="${tags }">
           	<div class="list">
-          	<table class="sortable subitems">
+          	<table id="tags" class="sortable subitems">
           	<thead>
           	<tr>
           		<th>Key</th>
@@ -132,6 +132,7 @@
 		        </tr>
 		      	</g:each>
 		      	</table>
+		      	<input type="button" id="addrow" value="Add Tag" />		      	
 		      	</div>
 		      </g:if>
 		      </td>
