@@ -21,6 +21,18 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="layout" content="main"/>
   <title>Edit Auto Scaling Group</title>
+  <script>
+  	function toggleRow(id){
+  	  	var tg = document.getElementById(id);
+  	  	var bgColor = '#ffffff';
+  	  	if(tg.checked){
+  	  	  	bgColor = '#FF0000';
+  	  	}
+  	  	var parent = tg.parentNode;
+  	  	var trParent = parent.parentNode;
+  	  	trParent.style.backgroundColor = bgColor;	  	
+  	}
+  </script>
 </head>
 <body>
   <div class="body">
@@ -103,6 +115,7 @@
           		<th>Key</th>
           		<th>Value</th>
           		<th>Propagate</th>
+          		<th>Delete?</th>
           	</tr>
           	</thead>
 		      <g:each var="tag" in="${tags}" status="i">
@@ -115,6 +128,7 @@
 		          <g:else>
 		          	<td><input type="checkbox" id="tags.props.${tag.key}" name="tags.props.${tag.key}" /></td>
 		          </g:else>
+		          <td><input type="checkbox" id="tags.delete.${tag.key }" name="tags.delete.${tag.key }" onclick="toggleRow('tags.delete.${tag.key}');"/></td>
 		        </tr>
 		      	</g:each>
 		      	</table>

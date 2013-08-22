@@ -440,12 +440,7 @@ class AutoScalingController {
 			
 			List<Tag> tags = new ArrayList<Tag>();
 			params.tags.value.each { key, value ->
-				Tag t = new Tag()
-				t.setKey(key)
-				t.setValue(value)
-				t.setPropagateAtLaunch(params['tags.props.' + key] == 'on' ? true:false)
-				t.setResourceId(name)
-				t.setResourceType("auto-scaling-group")
+				Tag t = new Tag(key:key, value:value, propagateAtLaunch:params['tags.props.' + key] == 'on' ? true:false, resourceId:name, resourceType:"auto-scaling-group")
 				tags.add(t);
 			}
 			
