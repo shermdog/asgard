@@ -448,6 +448,18 @@ class AutoScalingController {
 				awsAutoScalingService.updateTags(userContext, tags, null)
 			}
 			
+			tags = new ArrayList<Tag>();
+			params.tags.delete.each { key, value ->
+				if (value == 'on'){
+					Tag t = new Tag(key:key, value:params['tags.values.' + key], propagateAtLaunch:params['tags.props.' + key] == 'on' ? true:false, resourceId:name, resourceType:"auto-scaling-group")
+					tags.add(t)
+				}
+			}
+			
+			if (tags.size() > 0){
+				awsAutoScalingService.deleteTags(userContext, tags, null)
+			}
+			
 						
             final AutoScalingGroupData autoScalingGroupData = AutoScalingGroupData.forUpdate(
                     name, lcName, minSize, desiredCapacity, maxSize, defaultCooldown, healthCheckType,

@@ -34,6 +34,7 @@ import com.amazonaws.services.autoscaling.model.DeleteAutoScalingGroupRequest
 import com.amazonaws.services.autoscaling.model.DeleteLaunchConfigurationRequest
 import com.amazonaws.services.autoscaling.model.DeletePolicyRequest
 import com.amazonaws.services.autoscaling.model.DeleteScheduledActionRequest
+import com.amazonaws.services.autoscaling.model.DeleteTagsRequest
 import com.amazonaws.services.autoscaling.model.DescribeAutoScalingGroupsRequest
 import com.amazonaws.services.autoscaling.model.DescribeAutoScalingGroupsResult
 import com.amazonaws.services.autoscaling.model.DescribeLaunchConfigurationsRequest
@@ -828,6 +829,15 @@ class AwsAutoScalingService implements CacheInitializer, InitializingBean {
 			CreateOrUpdateTagsRequest request = new CreateOrUpdateTagsRequest()
 			request.setTags(tags)
 			awsClient.by(userContext.region).createOrUpdateTags(request)
+		}, Link.to(EntityType.autoScaling, autoScalingGroupName), existingTask)
+	}
+	
+	void deleteTags(UserContext userContext, List<Tag> tags, String autoScalingGroupName, Task existingTask = null){
+		String msg = "Delete tags on Auto Scaling Group on '${autoScalingGroupName}'"
+		taskService.runTask(userContext, msg, {Task task ->
+			DeleteTagsRequest request = new DeleteTagsRequest()
+			request.setTags(tags)
+			awsClient.by(userContext.region).deleteTags(request)
 		}, Link.to(EntityType.autoScaling, autoScalingGroupName), existingTask)
 	}
 
