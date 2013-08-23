@@ -1066,6 +1066,34 @@ jQuery(document).ready(function() {
             };
             jQuery(document).on('click', '.enableManualDesiredCapacityOverride', showAndEnableDesiredSize);
         }
+        
+        addRow = function(){        	 
+            counter = jQuery('#tags tr').length - 1;
+
+            var newRow = jQuery("<tr>");
+            var cols = "";
+
+            // Need to figure out the proper field names here still...
+            cols += '<td><input type="text" name="tags.key' + counter + '" maxlength="128"/></td>';
+            cols += '<td><input type="text" name="tags.value' + counter + '" maxlength="256"/></td>';
+            cols += '<td><input type="checkbox" name="tags.props' + counter + '"/></td>';
+
+            cols += '<td><input type="button" class="ibtnDel"  value="Delete"></td>';
+            jQuery(newRow).append(cols);
+            if (counter == 9) jQuery('#addrow').attr('disabled', true).prop('value', "You've reached the limit");
+            jQuery("table.sortable").append(newRow);
+            counter++;
+        };
+        
+        delRow = function(){
+        	jQuery(this).closest("tr").remove();
+        	
+        	counter -= 1
+            jQuery('#addrow').attr('disabled', false).prop('value', "Add Tag");
+        }
+        
+        jQuery(document).on('click', '#addrow', addRow);
+        jQuery(document).on('click', '.ibtnDel', delRow);
     };
     setUpGroupEditScreen();
 
