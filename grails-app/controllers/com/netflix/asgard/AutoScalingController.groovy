@@ -445,7 +445,7 @@ class AutoScalingController {
 			}
 			
 			if (tags.size() > 0){
-				awsAutoScalingService.updateTags(userContext, tags, null)
+				awsAutoScalingService.updateTags(userContext, tags, name)
 			}
 			
 			tags = new ArrayList<Tag>();
@@ -457,7 +457,7 @@ class AutoScalingController {
 			}
 			
 			if (tags.size() > 0){
-				awsAutoScalingService.deleteTags(userContext, tags, null)
+				awsAutoScalingService.deleteTags(userContext, tags, name)
 			}
 			
 						
