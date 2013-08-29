@@ -1058,23 +1058,21 @@ jQuery(document).ready(function() {
 
     // Auto Scaling Group edit page
     var setUpGroupEditScreen = function() {
-        var normalForms, tagValueInputs, formSubmitInterceptor;       
+        var normalForms, tagValueInputs, tagNameInputs, formSubmitInterceptor;       
         normalForms = jQuery('form').has('button[type="submit"]');
 
         formSubmitInterceptor = function(event) {
-        	var okayToSubmit = true;
-        	tagValueInputs = normalForms.find('input.tagValue[type="text"]');          
+        	tagValueInputs = normalForms.find('input.tagValue');          
             // Dynamically name tag input
             tagValueInputs.each(function() {
                 var jInput, name;
                 jInput = jQuery(this);
                 row = jInput.closest('tr')
-                name = row.find('input.tagName[type="text"]').val();                 
-                row.find('input.tagValue[type="text"]').attr('name', 'tags.value.' + name);
-                row.find('input.tagProps[type="checkbox"]').attr('name', 'tags.props.' + name);                
-            });
-            
-            return okayToSubmit;
+                name = row.find('input.tagName').val();                 
+                row.find('input.tagValue').attr('name', 'tags.value.' + name);
+                row.find('input.tagProps').attr('name', 'tags.props.' + name);                
+            });            
+            return true;
         };
     	
         var showAndEnableDesiredSize, jDesiredCapacityContainer = jQuery('.desiredCapacityContainer');;
@@ -1086,21 +1084,46 @@ jQuery(document).ready(function() {
             jQuery(document).on('click', '.enableManualDesiredCapacityOverride', showAndEnableDesiredSize);
         }
         
-        uniqueName = function(){
-            var current = jQuery(this).closest('td').find('input.tagName[type="text"]');      
-
-            jQuery('.tagname').each(function() {
-            	alert(jQuery(this).val());
-                if (jQuery(this).val() == current.val() && jQuery(this).attr('id') != $current.attr('id'))
+        clearDisable = function(){
+	    	if (normalForms.find('input[type="text"].error').length == 0){
+	    		jQuery('button[type="submit"]').attr('disabled', false);
+	    	}
+        }
+        
+        uniqueName = function(event){             	
+            var current = jQuery(event);
+            
+            tagNameInputs = normalForms.find('input.tagName');          
+            tagNameInputs.each(function() {               
+            	if (jQuery(this).val() == current.val() && jQuery(this).attr('id') != current.attr('id'))
                 {
-                    alert('duplicate found!');
+                    alert('Tag names must be unique!');
+                    current.addClass('error').focus().parent().yellowFade();
+                    jQuery('button[type="submit"]').attr('disabled', true);
+                    return false;
                 }
 
+            	current.removeClass('error');
+            	clearDisable();
             });
         }
         
-        uniqueValue = function(){
-        	//alert("check value");
+        uniqueValue = function(event){  
+            var current = jQuery(event);            
+            
+            tagValueInputs = normalForms.find('input.tagValue');          
+            tagValueInputs.each(function() {
+            	if (jQuery(this).val() == current.val() && jQuery(this).attr('id') != current.attr('id'))
+                {
+                    alert('Tag values must be unique!');
+                    current.addClass('error').focus().parent().yellowFade();
+                    jQuery('button[type="submit"]').attr('disabled', true);
+                    return false;
+                }
+
+            	current.removeClass('error');
+            	clearDisable();
+            });
         }
         
         addRow = function(){        	 
@@ -1109,9 +1132,8 @@ jQuery(document).ready(function() {
             var newRow = jQuery("<tr>");
             var cols = "";
 
-            // Need to figure out the proper field names here still...
-            cols += '<td><input type="text" class="tagName" maxlength="128" required onchange="uniqueName()"/></td>';
-            cols += '<td><input type="text" class="tagValue" maxlength="256" required onchange="uniqueValue()"/></td>';
+            cols += '<td><input type="text" id="tags.name.' + counter + '" class="tagName"  maxlength="128" required onchange="uniqueName(jQuery(this))"/></td>';
+            cols += '<td><input type="text" id="tags.value.' + counter + '" class="tagValue" maxlength="256" required onchange="uniqueValue(jQuery(this))"/></td>';
             cols += '<td><input type="checkbox" class="tagProps" /></td>';
 
             cols += '<td><input type="button" class="ibtnDel"  value="Delete"></td>';
@@ -1125,7 +1147,9 @@ jQuery(document).ready(function() {
         	jQuery(this).closest("tr").remove();
         	
         	counter -= 1
-            jQuery('#addrow').attr('disabled', false).prop('value', "Add Tag");
+            jQuery('#addrow').attr('disabled', false).prop('value', "Add Tag");        	
+        	
+        	clearDisable();
         }      
         
         jQuery(document).on('click', '#addrow', addRow);
