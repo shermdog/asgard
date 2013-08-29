@@ -2,7 +2,7 @@
 
 Asgard is a web-based tool for managing cloud-based applications and infrastructure.
 
-[![Build Status](https://netflixoss.ci.cloudbees.com/job/asgard-master/badge/icon)](https://netflixoss.ci.cloudbees.com/job/asgard-master/)
+[![Build Status](https://travis-ci.org/shermdog/asgard.png)](https://travis-ci.org/shermdog/asgard)
 
 ## DOWNLOAD
 
