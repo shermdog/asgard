@@ -18,8 +18,6 @@ package com.netflix.asgard
 import com.amazonaws.services.autoscaling.model.AutoScalingGroup
 import com.amazonaws.services.autoscaling.model.LaunchConfiguration
 import com.amazonaws.services.autoscaling.model.ScheduledUpdateGroupAction
-import com.amazonaws.services.autoscaling.model.Tag;
-import com.amazonaws.services.autoscaling.model.TagDescription;
 import com.amazonaws.services.ec2.model.AvailabilityZone
 import com.amazonaws.services.elasticloadbalancing.model.LoadBalancerDescription
 import com.amazonaws.services.simpleworkflow.flow.ManualActivityCompletionClient
@@ -44,7 +42,6 @@ import com.netflix.asgard.push.GroupDeleteOperation
 import com.netflix.asgard.push.GroupResizeOperation
 import com.netflix.asgard.push.InitialTraffic
 import com.netflix.grails.contextParam.ContextParam
-
 import grails.converters.JSON
 import grails.converters.XML
 
@@ -145,7 +142,6 @@ class ClusterController {
 ${lastGroup.loadBalancerNames}"""
                     List<String> subnetPurposes = subnets.getPurposesForZones(availabilityZones*.zoneName,
                             SubnetTarget.EC2).sort()
-							List<TagDescription> tags = lastGroup.getTags()
                     attributes.putAll([
                             cluster: cluster,
                             runningTasks: runningTasks,
@@ -162,8 +158,7 @@ ${lastGroup.loadBalancerNames}"""
                             loadBalancersGroupedByVpcId: loadBalancers.groupBy { it.VPCId },
                             selectedLoadBalancers: selectedLoadBalancers,
                             spotUrl: configService.spotUrl,
-                            pricing: params.pricing ?: attributes.pricing,
-							tags:tags
+                            pricing: params.pricing ?: attributes.pricing
                     ])
                     attributes
                 }
@@ -428,17 +423,6 @@ Group: ${lastGroup.loadBalancerNames}"""
                 vpcZoneIdentifier = vpcZoneIdentifier ?: subnets.constructNewVpcZoneIdentifierForZones(lastGroup.vpcZoneIdentifier,
                         selectedZones)
             }
-			
-			List<Tag> tags = new ArrayList<Tag>();
-			if (params.tags) {
-				println "TAAGG:" + tags
-				params.tags.value.each { key, value ->
-					Tag t = new Tag(key:key, value:value, propagateAtLaunch:params['tags.props.' + key] == 'on' ? true:false, resourceId:name, resourceType:"auto-scaling-group")
-					tags.add(t);
-				}				
-			}
-
-			
             log.debug """ClusterController.createNextGroup for Cluster '${cluster.name}' Load Balancers for next \
 Group: ${loadBalancerNames}"""
             GroupCreateOptions options = new GroupCreateOptions(
@@ -472,8 +456,7 @@ Group: ${loadBalancerNames}"""
                     scheduledActions: newScheduledActions,
                     vpcZoneIdentifier: vpcZoneIdentifier,
                     spotPrice: spotPrice,
-                    ebsOptimized: ebsOptimized,
-					tags: tags.size() > 0 ? tags: null
+                    ebsOptimized: ebsOptimized
             )
             def operation = pushService.startGroupCreate(options)
             flash.message = "${operation.task.name} has been started."

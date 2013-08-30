@@ -16,10 +16,7 @@
 package com.netflix.asgard.push
 
 import com.amazonaws.services.autoscaling.model.ScheduledUpdateGroupAction
-import com.amazonaws.services.autoscaling.model.Tag;
-import com.amazonaws.services.autoscaling.model.TagDescription;
 import com.netflix.asgard.model.ScalingPolicyData
-
 import groovy.transform.Immutable
 
 @Immutable final class GroupCreateOptions {
@@ -40,7 +37,6 @@ import groovy.transform.Immutable
     Collection<ScheduledUpdateGroupAction> scheduledActions
     String spotPrice
     boolean ebsOptimized
-	Collection<Tag> tags
 
     /** The number of instances to create at a time while inflating the auto scaling group. */
     Integer batchSize
