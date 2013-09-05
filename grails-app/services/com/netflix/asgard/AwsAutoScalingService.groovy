@@ -735,7 +735,8 @@ class AwsAutoScalingService implements CacheInitializer, InitializingBean {
                         terminationPolicies: terminationPolicies,
                         healthCheckType: healthCheckType,
                         healthCheckGracePeriod: healthCheckGracePeriod, availabilityZones: availabilityZones,
-                        loadBalancerNames: loadBalancerNames, VPCZoneIdentifier: VPCZoneIdentifier)
+                        loadBalancerNames: loadBalancerNames, VPCZoneIdentifier: VPCZoneIdentifier,
+						tags: tags)
             }
             awsClient.by(userContext.region).createAutoScalingGroup(request)
             suspendedProcesses.each {
