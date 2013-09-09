@@ -67,19 +67,7 @@ class MockAutoScalingGroups {
     "status": null,
     "suspendedProcesses":
     [
-    ],
-	"tags": 
-	[
-		{
-			"key": "test",
-			"value": "test",
-			"propagateAtLaunch": "true",
-			"resourceId": "akms-v002",
-			"resourceType":"auto-scaling-group"
-
-		}
-	
-	]
+    ]
   },
   {
     "VPCZoneIdentifier": null,

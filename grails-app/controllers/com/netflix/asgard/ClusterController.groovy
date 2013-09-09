@@ -144,7 +144,7 @@ class ClusterController {
 ${lastGroup.loadBalancerNames}"""
                     List<String> subnetPurposes = subnets.getPurposesForZones(availabilityZones*.zoneName,
                             SubnetTarget.EC2).sort()
-							List<TagDescription> tags = lastGroup.getTags()
+					List<TagDescription> tags = lastGroup.getTags()
                     attributes.putAll([
                             cluster: cluster,
                             runningTasks: runningTasks,
@@ -427,14 +427,17 @@ Group: ${lastGroup.loadBalancerNames}"""
                 vpcZoneIdentifier = vpcZoneIdentifier ?: subnets.constructNewVpcZoneIdentifierForZones(lastGroup.vpcZoneIdentifier,
                         selectedZones)
             }
-			
-		      List<Tag> tags = new ArrayList<Tag>();
-		      if (params.tags) {
-		        params.tags.value.each { key, value ->
-		          Tag t = new Tag(key:key, value:value, propagateAtLaunch:params['tags.props.' + key] == 'on' ? true:false, resourceId:nextGroupName, resourceType:"auto-scaling-group")
-		          tags.add(t);
-		        }
-		      }
+						 			
+			List<Tag> tags = new ArrayList<Tag>();						
+			if (params.tags) {						
+				params.tags.value.each { key, value ->
+					Tag t = new Tag(key:key, value:value, propagateAtLaunch:params['tags.props.' + key] == 'on' ? true:false, resourceId:nextGroupName, resourceType:"auto-scaling-group")
+					tags.add(t);
+				}
+			}			
+			else {
+				tags = lastGroup.tags;
+			}
 			
 			
             log.debug """ClusterController.createNextGroup for Cluster '${cluster.name}' Load Balancers for next \

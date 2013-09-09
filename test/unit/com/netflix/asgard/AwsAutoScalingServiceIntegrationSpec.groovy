@@ -141,7 +141,7 @@ class AwsAutoScalingServiceIntegrationSpec extends Specification {
         final AutoScalingGroup groupTemplate = new AutoScalingGroup().withAutoScalingGroupName('helloworld-example').
                 withAvailabilityZones([]).withLoadBalancerNames([]).
                 withMaxSize(0).withMinSize(0).withDefaultCooldown(0).
-				withTags(new ArrayList<Tag>(new Tag(key: 'test', value: 'lastTag', propagateAtLaunch: true, resourceId: 'helloworld-example', resourceType:'auto-scaling-group')))
+				withTags([new Tag(resourceType:'auto-scaling-group', resourceId:'helloworld-example',key:'test',value:'lastTag')])
         final LaunchConfiguration launchConfigTemplate = new LaunchConfiguration().withImageId('ami-deadbeef').
                 withInstanceType('m1.small').withKeyName('keyName').withSecurityGroups([]).withUserData('').
                 withEbsOptimized(false)
