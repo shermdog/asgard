@@ -174,7 +174,7 @@
                 <g:render template="/autoScaling/autoScalingOptions" />
                 <g:render template="/common/editTags" model="[entity: tags]" />
                 <g:render template="/loadBalancer/selection"/>
-                <g:render template="/launchConfiguration/launchConfigOptions" />                
+                <g:render template="/launchConfiguration/launchConfigOptions" />
                 <g:render template="/push/startupOptions" />
                 <tr class="advanced">
                   <td>
